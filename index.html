@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Deemah's Cafe</title>
+    
+    <style>
+        :root {
+            --app-bg: #F9F9F9;
+            --white: #FFFFFF;
+            --brand-color: #00CCBC; /* Deliveroo-style teal */
+            --brand-dark: #00A396;
+            --text-main: #2E3333;
+            --text-secondary: #585C5C;
+            --border-color: #E8EBEB;
+            --shadow-bottom: 0 -4px 12px rgba(0,0,0,0.08);
+            --shadow-card: 0 2px 8px rgba(0,0,0,0.04);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--app-bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            -webkit-tap-highlight-color: transparent; 
+            padding-bottom: 90px; /* Space for the bottom cart bar */
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: var(--white);
+            width: 100%;
+            padding: 16px 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .icon-btn {
+            background: var(--app-bg);
+            border: none;
+            color: var(--brand-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .icon-btn:active {
+            background: var(--border-color);
+        }
+
+        /* --- Main Content Area --- */
+        main {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--white);
+            box-shadow: var(--shadow-card);
+            min-height: 100vh;
+        }
+
+        /* --- Menu Section --- */
+        .category-section {
+            padding: 24px 20px 8px 20px;
+            border-bottom: 8px solid var(--app-bg);
+        }
+
+        .category-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 0 0 16px 0;
+            color: var(--text-main);
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-grow: 1;
+        }
+
+        .item-photo {
+            width: 64px;
+            height: 64px;
+            background-color: var(--app-bg);
+            border-radius: var(--radius-md);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .item-details h3 {
+            margin: 0 0 4px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .item-details p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .add-btn {
+            background: var(--white);
+            color: var(--brand-color);
+            border: 1px solid var(--border-color);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 300;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.1s;
+        }
+
+        .add-btn:active {
+            background: var(--brand-color);
+            color: var(--white);
+            transform: scale(0.95);
+        }
+
+        /* --- Sticky Bottom Cart Bar (Menu Page) --- */
+        .bottom-cart-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--white);
+            padding: 16px 20px;
+            box-sizing: border-box;
+            box-shadow: var(--shadow-bottom);
+            z-index: 90;
+            display: flex;
+            justify-content: center;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .bottom-cart-bar.visible {
+            transform: translateY(0);
+        }
+
+        .view-cart-btn {
+            background-color: var(--brand-color);
+            color: var(--white);
+            border: none;
+            width: 100%;
+            max-width: 560px;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .view-cart-btn:active {
+            background-color: var(--brand-dark);
+        }
+
+        .cart-qty-badge {
+            background-color: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+        }
+
+        /* --- Cart Page (Full Screen Overaly) --- */
+        #cart-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--app-bg);
+            z-index: 200;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .cart-header {
+            background-color: var(--white);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid var(--border-color);
+            z-index: 201;
+        }
+
+        .cart-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .close-cart-btn {
+            background: none;
+            border: none;
+            color: var(--brand-color);
+            padding: 0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .cart-items-container {
+            background-color: var(--white);
+            padding: 0 20px;
+            margin-top: 12px;
+            flex-grow: 1;
+        }
+
+        .cart-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-list-item:last-child { border-bottom: none; }
+
+        .cart-item-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .qty-btn {
+            background-color: var(--app-bg);
+            color: var(--brand-color);
+            border: 1px solid var(--border-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .qty-btn:active { background-color: var(--border-color); }
+        .qty-number { font-weight: 700; font-size: 1.1rem; min-width: 20px; text-align: center; }
+
+        .cart-actions {
+            background-color: var(--white);
+            padding: 20px;
+            position: sticky;
+            bottom: 0;
+            box-shadow: var(--shadow-bottom);
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background-color: var(--brand-color);
+            color: var(--white);
+            border: none;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkout-btn:active { background-color: var(--brand-dark); }
+        
+        .clear-cart-text {
+            text-align: center;
+            margin-top: 16px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+        
+        /* QR Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            z-index: 300;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: var(--white);
+            width: 85%;
+            max-width: 320px;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+        }
+        .modal-content h2 { margin-top: 0; color: var(--text-main); font-weight: 800;}
+        .qr-image-container { margin: 20px 0; }
+        .qr-image-container img { width: 200px; height: 200px; display: block; margin: 0 auto; }
+        .modal-close-btn {
+            width: 100%;
+            background: var(--app-bg);
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-view">
+        <header>
+            <div class="header-title-wrapper">
+                <h1>Deemah's Cafe</h1>
+                <span class="subtitle">Drinks & Sweets</span>
+            </div>
+            <button class="icon-btn" onclick="toggleQRModal(true)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h6v6H4z"></path>
+                    <path d="M14 4h6v6h-6z"></path>
+                    <path d="M14 14h6v6h-6z"></path>
+                    <path d="M4 14h6v6H4z"></path>
+                </svg>
+            </button>
+        </header>
+
+        <main>
+            <section class="category-section">
+                <h2 class="category-title">Drinks</h2>
+                <div class="menu-list">
+                    
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <div class="item-photo">☕</div>
+                            <div class="item-details">
+                                <h3>Espresso</h3>
+                                <p>Rich & bold</p>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('Espresso')">＋</button>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <div class="item-photo">🥛</div>
+                            <div class="item-details">
+                                <h3>Lungo</h3>
+                                <p>Smooth & extended</p>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('Lungo')">＋</button>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <div class="item-photo">🍵</div>
+                            <div class="item-details">
+                                <h3>Green Tea</h3>
+                                <p>Light & refreshing</p>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('Green Tea')">＋</button>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="category-section">
+                <h2 class="category-title">Sweets</h2>
+                <div class="menu-list">
+                    
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <div class="item-photo">🍫</div>
+                            <div class="item-details">
+                                <h3>KitKat</h3>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('KitKat')">＋</button>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <div class="item-photo">🍪</div>
+                            <div class="item-details">
+                                <h3>Biscuit</h3>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('Biscuit')">＋</button>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <div class="item-photo">🍰</div>
+                            <div class="item-details">
+                                <h3>Cake</h3>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('Cake')">＋</button>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <div class="item-photo">🍮</div>
+                            <div class="item-details">
+                                <h3>Cream Caramel</h3>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('Cream Caramel')">＋</button>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <div class="item-photo">🍫</div>
+                            <div class="item-details">
+                                <h3>Chocolate</h3>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('Chocolate')">＋</button>
+                    </div>
+
+                    <div class="menu-item">
+                        <div class="item-info">
+                            <div class="item-photo">🍩</div>
+                            <div class="item-details">
+                                <h3>Donut</h3>
+                            </div>
+                        </div>
+                        <button class="add-btn" onclick="addToCart('Donut')">＋</button>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+        <div class="bottom-cart-bar" id="bottom-cart-bar">
+            <button class="view-cart-btn" onclick="toggleCartPage(true)">
+                <span class="cart-qty-badge" id="bottom-cart-qty">1</span>
+                <span>View order</span>
+                <span>➔</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="cart-page">
+        <div class="cart-header">
+            <button class="close-cart-btn" onclick="toggleCartPage(false)">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <h2>Your Order</h2>
+        </div>
+
+        <div class="cart-items-container" id="cart-content-area">
+            </div>
+
+        <div class="cart-actions" id="cart-actions-area">
+            <button class="checkout-btn" onclick="shareOrder()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                Send Order
+            </button>
+            <div class="clear-cart-text" onclick="clearCart()">Empty cart</div>
+        </div>
+    </div>
+
+    <div id="qr-modal" class="modal-overlay" onclick="handleModalClick(event)">
+        <div class="modal-content">
+            <h2>Scan to Order</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Point your camera at this code.</p>
+            <div class="qr-image-container">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=00CCBC&data=https://rapidsteel.github.io/Deemah-cafe/" alt="QR Code">
+            </div>
+            <button class="modal-close-btn" onclick="toggleQRModal(false)">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function addToCart(itemName) {
+            const existingItem = cart.find(item => item.name === itemName);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name: itemName, quantity: 1 });
+            }
+            
+            updateCartState();
+            
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(15);
+            }
+
+            // Quick animation on the + button
+            const button = event.currentTarget;
+            if (button) {
+                button.style.backgroundColor = 'var(--brand-color)';
+                button.style.color = 'var(--white)';
+                setTimeout(() => {
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
+                }, 150);
+            }
+        }
+
+        function updateQty(itemName, change) {
+            const itemIndex = cart.findIndex(item => item.name === itemName);
+            if (itemIndex > -1) {
+                cart[itemIndex].quantity += change;
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1);
+                }
+                updateCartState();
+                renderCartPage(); // Re-render the open cart
+                if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(10);
+            }
+        }
+
+        function updateCartState() {
+            const bottomBar = document.getElementById('bottom-cart-bar');
+            const qtyBadge = document.getElementById('bottom-cart-qty');
+            
+            let totalItems = 0;
+            cart.forEach(item => totalItems += item.quantity);
+            
+            // Show/Hide bottom sticky bar
+            if (totalItems > 0) {
+                bottomBar.classList.add('visible');
+                qtyBadge.innerText = totalItems;
+            } else {
+                bottomBar.classList.remove('visible');
+                // Automatically close cart page if empty
+                if(document.getElementById('cart-page').style.display === 'flex') {
+                    toggleCartPage(false);
+                }
+            }
+        }
+
+        function toggleCartPage(show) {
+            const mainView = document.getElementById('main-view');
+            const cartPage = document.getElementById('cart-page');
+            
+            if (show) {
+                renderCartPage();
+                cartPage.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            } else {
+                cartPage.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+
+        function renderCartPage() {
+            const cartContentArea = document.getElementById('cart-content-area');
+            const cartActionsArea = document.getElementById('cart-actions-area');
+            
+            cartContentArea.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartContentArea.innerHTML = `
+                    <div id="empty-state">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--border-color); margin-bottom:16px;">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <h3 style="margin:0; color:var(--text-main);">Your cart is empty</h3>
+                        <p style="margin-top:8px;">Add some items to get started.</p>
+                    </div>`;
+                cartActionsArea.style.display = 'none';
+            } else {
+                cartActionsArea.style.display = 'block';
+                
+                cart.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'cart-list-item';
+                    div.innerHTML = `
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="updateQty('${item.name}', -1)">−</button>
+                            <span class="qty-number">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQty('${item.name}', 1)">＋</button>
+                        </div>
+                    `;
+                    cartContentArea.appendChild(div);
+                });
+            }
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCartState();
+            toggleCartPage(false);
+        }
+
+        async function shareOrder() {
+            if (cart.length === 0) return;
+            let orderText = "🧾 Deemah's Cafe Order:\n\n";
+            cart.forEach(item => orderText += `${item.quantity}x ${item.name}\n`);
+
+            if (navigator.share && /mobile|android|iphone|ipad/i.test(navigator.userAgent)) {
+                try { await navigator.share({ title: 'My Order', text: orderText }); } catch (err) {}
+            } else {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(orderText).then(() => {
+                        alert("✅ Order copied to clipboard!\n\nPaste it to send your order.");
+                    }).catch(() => alert("Copy your order:\n\n" + orderText));
+                } else {
+                    alert("Copy your order:\n\n" + orderText);
+                }
+            }
+        }
+
+        function toggleQRModal(show) {
+            document.getElementById('qr-modal').style.display = show ? 'flex' : 'none';
+        }
+
+        function handleModalClick(event) {
+            if (event.target.id === 'qr-modal') toggleQRModal(false);
+        }
+
+    </script>
+</body>
+</html>
