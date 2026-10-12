@@ -131,15 +131,23 @@
         }
 
         .item-photo {
-            width: 64px;
-            height: 64px;
+            width: 72px;
+            height: 72px;
             background-color: var(--app-bg);
-            border-radius: var(--radius-md);
+            border-radius: 14px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2rem;
-            border: 1px solid var(--border-color);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .item-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .item-details h3 {
@@ -411,7 +419,9 @@
                     
                     <div class="menu-item">
                         <div class="item-info">
-                            <div class="item-photo">☕</div>
+                            <div class="item-photo">
+                                <img src="https://images.unsplash.com/photo-1497636577773-f1231844b336?auto=format&fit=crop&w=400&q=80" alt="Espresso" loading="lazy">
+                            </div>
                             <div class="item-details">
                                 <h3>Espresso</h3>
                                 <p>Rich & bold</p>
@@ -422,7 +432,9 @@
 
                     <div class="menu-item">
                         <div class="item-info">
-                            <div class="item-photo">🥛</div>
+                            <div class="item-photo">
+                                <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&q=80" alt="Lungo" loading="lazy">
+                            </div>
                             <div class="item-details">
                                 <h3>Lungo</h3>
                                 <p>Smooth & extended</p>
@@ -433,7 +445,9 @@
 
                     <div class="menu-item">
                         <div class="item-info">
-                            <div class="item-photo">🍵</div>
+                            <div class="item-photo">
+                                <img src="https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=400&q=80" alt="Green Tea" loading="lazy">
+                            </div>
                             <div class="item-details">
                                 <h3>Green Tea</h3>
                                 <p>Light & refreshing</p>
@@ -451,7 +465,9 @@
                     
                     <div class="menu-item">
                         <div class="item-info">
-                            <div class="item-photo">🍫</div>
+                            <div class="item-photo">
+                                <img src="https://images.unsplash.com/photo-1553452118-45f0d7e9d7b2?auto=format&fit=crop&w=400&q=80" alt="KitKat" loading="lazy">
+                            </div>
                             <div class="item-details">
                                 <h3>KitKat</h3>
                             </div>
@@ -461,7 +477,9 @@
 
                     <div class="menu-item">
                         <div class="item-info">
-                            <div class="item-photo">🍪</div>
+                            <div class="item-photo">
+                                <img src="https://images.unsplash.com/photo-1499636136210-6d4eea2f75f5?auto=format&fit=crop&w=400&q=80" alt="Biscuit" loading="lazy">
+                            </div>
                             <div class="item-details">
                                 <h3>Biscuit</h3>
                             </div>
@@ -471,7 +489,9 @@
 
                     <div class="menu-item">
                         <div class="item-info">
-                            <div class="item-photo">🍰</div>
+                            <div class="item-photo">
+                                <img src="https://images.unsplash.com/photo-1555808271-9b2104b8bb1d?auto=format&fit=crop&w=400&q=80" alt="Cake" loading="lazy">
+                            </div>
                             <div class="item-details">
                                 <h3>Cake</h3>
                             </div>
@@ -481,7 +501,9 @@
 
                     <div class="menu-item">
                         <div class="item-info">
-                            <div class="item-photo">🍮</div>
+                            <div class="item-photo">
+                                <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=400&q=80" alt="Cream Caramel" loading="lazy">
+                            </div>
                             <div class="item-details">
                                 <h3>Cream Caramel</h3>
                             </div>
@@ -491,7 +513,9 @@
 
                     <div class="menu-item">
                         <div class="item-info">
-                            <div class="item-photo">🍫</div>
+                            <div class="item-photo">
+                                <img src="https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=400&q=80" alt="Chocolate" loading="lazy">
+                            </div>
                             <div class="item-details">
                                 <h3>Chocolate</h3>
                             </div>
@@ -501,7 +525,9 @@
 
                     <div class="menu-item">
                         <div class="item-info">
-                            <div class="item-photo">🍩</div>
+                            <div class="item-photo">
+                                <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=400&q=80" alt="Donut" loading="lazy">
+                            </div>
                             <div class="item-details">
                                 <h3>Donut</h3>
                             </div>
@@ -645,7 +671,7 @@
             if (cart.length === 0) {
                 cartContentArea.innerHTML = `
                     <div id="empty-state">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--border-color); margin-bottom:16px;">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--border-color);">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
